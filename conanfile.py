@@ -5,7 +5,7 @@ class StreebogConan(ConanFile):
     name = "streebog"
     version = "0.12"
     license = "BSD 2-Clause"
-    url = "https://github.com/memsharded/conan-hello.git"
+    url = "https://github.com/db4/conan-streebog.git"
     settings = "os", "compiler", "build_type", "arch"
     options = {"sse2": [True, False], "sse41": [True, False]}
     default_options = "sse2=False", "sse41=False"
