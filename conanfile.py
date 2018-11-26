@@ -44,6 +44,10 @@ class StreebogConan(ConanFile):
         tools.save(os.path.join(self.src_dir, "gost3411-2012-config.h"), config)
         cmake = CMake(self)
         cmake.definitions["STREEBOG_VERSION"] = self.version
+        if self.options.get_safe("sse2"):
+            cmake.definitions["SSE2"] = True
+        if self.options.get_safe("sse41"):
+            cmake.definitions["SSE41"] = True
         cmake.configure()
         cmake.build()
 

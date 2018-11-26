@@ -4,8 +4,8 @@
 int main(int argc, char *argv[])
 {
     ALIGN(16) GOST34112012Context CTX;
-
     unsigned char digest[64];
+    int i;
 
     GOST34112012Init(&CTX, 512);
 
@@ -17,8 +17,10 @@ int main(int argc, char *argv[])
 
     GOST34112012Cleanup(&CTX);
 
-    for (int i = 0; i < 64; ++i) {
+    for (i = 0; i < 64; ++i) {
         printf("%02X", digest[i]);
     }
     printf("\n");
+
+    return 0;
 }
