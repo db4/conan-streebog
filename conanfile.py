@@ -8,7 +8,7 @@ class StreebogConan(ConanFile):
     url = "https://github.com/memsharded/conan-hello.git"
     settings = "os", "compiler", "build_type", "arch"
     options = {"sse2": [True, False], "sse41": [True, False]}
-    default_options = "sse2=True", "sse41=False"
+    default_options = "sse2=False", "sse41=False"
     exports_sources = "CMakeLists.txt", "*.patch"
     generators = "cmake"
 
@@ -19,6 +19,8 @@ class StreebogConan(ConanFile):
         else:
             if self.options.sse41:
                 self.options.sse2 = True
+            if self.settings.compiler == "Visual Studio" and self.settings.arch == "x86" and self.options.sse2:
+                raise Exception("Due to the bug in the sources MSVC/x86/SSE2 is not supported yet")
 
     def get_simd_option(self, name):
         contents = '''
