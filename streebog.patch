@@ -1,0 +1,72 @@
+--- a/gost3411-2012-core.h	Wed Sep 20 17:23:15 2017
++++ b/gost3411-2012-core.h	Wed Sep 20 17:26:56 2017
+@@ -26,11 +26,11 @@
+ #endif
+
+ ALIGN(16) union uint512_u
+ {
+     unsigned long long QWORD[8];
+-} uint512_u;
++};
+
+ #include "gost3411-2012-const.h"
+ #include "gost3411-2012-precalc.h"
+
+ ALIGN(16) typedef struct GOST34112012Context
+--- a/gost3411-2012-core.c	Wed Sep 20 17:23:15 2017
++++ b/gost3411-2012-core.c	Wed Sep 20 17:26:50 2017
+@@ -42,7 +42,7 @@
+     }
+ }
+
+-static inline void
++static void
+ pad(GOST34112012Context *CTX)
+ {
+     if (CTX->bufsize > 63)
+@@ -54,7 +54,7 @@
+     CTX->buffer[CTX->bufsize] = 0x01;
+ }
+
+-static inline void
++static void
+ add512(const union uint512_u *x, const union uint512_u *y, union uint512_u *r)
+ {
+ #ifndef __GOST3411_BIG_ENDIAN__
+@@ -130,9 +130,6 @@
+     X128M(m, xmm0, xmm2, xmm4, xmm6);
+
+     UNLOAD(h, xmm0, xmm2, xmm4, xmm6);
+-
+-    /* Restore the Floating-point status on the CPU */
+-    _mm_empty();
+ #else
+     union uint512_u Ki, data;
+     unsigned int i;
+@@ -155,7 +155,7 @@
+ #endif
+ }
+
+-static inline void
++static void
+ stage2(GOST34112012Context *CTX, const unsigned char *data)
+ {
+     g(&(CTX->h), &(CTX->N), data);
+@@ -164,7 +164,7 @@
+     add512(&(CTX->Sigma), (const union uint512_u *) data, &(CTX->Sigma));
+ }
+
+-static inline void
++static void
+ stage3(GOST34112012Context *CTX)
+ {
+     ALIGN(16) union uint512_u buf = {{ 0 }};
+@@ -186,7 +186,7 @@
+     g(&(CTX->h), &buffer0, (const unsigned char *) &(CTX->N));
+
+     g(&(CTX->h), &buffer0, (const unsigned char *) &(CTX->Sigma));
+-    memcpy(&(CTX->hash), &(CTX->h), sizeof uint512_u);
++    memcpy(&(CTX->hash), &(CTX->h), sizeof(union uint512_u));
+ }
+
+ void
