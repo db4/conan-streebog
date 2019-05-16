@@ -12,6 +12,10 @@ class StreebogConan(ConanFile):
     exports_sources = "CMakeLists.txt", "*.patch"
     generators = "cmake"
 
+    def configure(self):
+        del self.settings.compiler.libcxx
+        del self.settings.compiler.cppstd
+
     def config_options(self):
         if self.settings.arch != "x86" and self.settings.arch != "x86_64":
             del self.options.sse2
